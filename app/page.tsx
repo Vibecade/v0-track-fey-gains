@@ -462,7 +462,7 @@ export default function Home() {
                             maximumFractionDigits: 2,
                           })}
                         </p>
-                        <p className="mb-1.5 text-xs font-semibold text-muted-foreground sm:mb-2 sm:text-sm lg:text-base">
+                        <p className="mb-1.5 text-xs font-semibold text-primary sm:mb-2 sm:text-sm lg:text-base">
                           WETH
                         </p>
                         <p
@@ -686,9 +686,34 @@ export default function Home() {
               </div>
               <div className="relative h-[300px] w-full bg-gradient-to-br from-muted/30 to-muted/10 sm:h-[400px] lg:h-[500px]">
                 <iframe
-                  src="https://dune.com/embeds/5734648/9307253"
+                  src="https://dune.com/embeds/6193023/9884738"
                   className="h-full w-full border-0"
                   title="WETH Buybacks Chart"
+                />
+              </div>
+            </Card>
+
+            <Card className="mb-6 overflow-hidden border-2 border-accent shadow-2xl sm:mb-8">
+              <div className="border-b-2 border-accent/30 bg-gradient-to-r from-accent/10 via-primary/10 to-accent/10 p-4 sm:p-6 lg:p-7">
+                <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center sm:gap-4">
+                  <div>
+                    <div className="mb-1.5 flex items-center gap-2 sm:mb-2">
+                      <span className="text-xl sm:text-2xl">💰</span>
+                      <h2 className="text-lg font-black tracking-tight text-foreground sm:text-xl lg:text-2xl">
+                        FEY Staking Rewards
+                      </h2>
+                    </div>
+                    <p className="text-[10px] font-semibold text-muted-foreground sm:text-xs lg:text-sm">
+                      Total FEY distributed to stakers over time
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="relative h-[300px] w-full bg-gradient-to-br from-muted/30 to-muted/10 sm:h-[400px] lg:h-[500px]">
+                <iframe
+                  src="https://dune.com/embeds/6192852/9884506"
+                  className="h-full w-full border-0"
+                  title="Fey Staking rewards Chart"
                 />
               </div>
             </Card>

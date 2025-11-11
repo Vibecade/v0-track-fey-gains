@@ -14,7 +14,7 @@ async function fetchFromDune() {
   }
 
   // Query ID 5734648 for WETH buybacks
-  const response = await fetch("https://api.dune.com/api/v1/query/5734648/results?limit=1000", {
+  const response = await fetch("https://api.dune.com/api/v1/query/6193023/results?limit=1000", {
     headers: {
       "X-Dune-API-Key": apiKey,
     },
