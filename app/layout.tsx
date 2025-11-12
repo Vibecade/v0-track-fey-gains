@@ -23,8 +23,12 @@ export const metadata: Metadata = {
     description: "Track FEY staking rewards and conversion rates in real-time",
   },
   icons: {
-    icon: "/fey-logo.png",
+    icon: [
+      { url: "/fey-logo.png", sizes: "any" },
+      { url: "/fey-logo.png", sizes: "32x32", type: "image/png" },
+    ],
     apple: "/fey-logo.png",
+    shortcut: "/fey-logo.png",
   },
     generator: 'v0.app'
 }
