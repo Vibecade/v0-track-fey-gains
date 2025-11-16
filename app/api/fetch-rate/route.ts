@@ -65,7 +65,6 @@ export async function GET() {
       return NextResponse.json(cached)
     }
 
-    console.log("[v0] Fetching fresh conversion rate from blockchain")
     const data = await fetchFromBlockchain()
 
     await setCachedData(CACHE_KEY, data, CACHE_DURATION)
@@ -79,9 +78,7 @@ export async function GET() {
     })
 
     if (dbError) {
-      console.error("[v0] Error saving historical data:", dbError)
-    } else {
-      console.log("[v0] Saved historical data point to fey_rates table")
+      console.error("Error saving historical data:", dbError)
     }
 
     return NextResponse.json(data)

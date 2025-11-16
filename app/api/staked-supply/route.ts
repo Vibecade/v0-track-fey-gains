@@ -15,11 +15,9 @@ export async function GET() {
   try {
     const cached = await getCachedData("staked_supply_v2", 300) // 5 minute cache
     if (cached) {
-      console.log("[v0] Staked supply cache hit")
       return NextResponse.json(cached)
     }
 
-    console.log("[v0] Fetching staked supply from blockchain...")
 
     // Call totalAssets() on the xFEY contract to get FEY locked in vault
     const response = await fetch(BASE_RPC_URL, {
@@ -51,8 +49,6 @@ export async function GET() {
     const totalStakedTokens = Number(totalStakedWei) / 1e18
     const percentageStaked = (totalStakedTokens / TOTAL_SUPPLY) * 100
 
-    console.log("[v0] Total staked:", totalStakedTokens, "tokens")
-    console.log("[v0] Percentage staked:", percentageStaked.toFixed(2), "%")
 
     const result = {
       totalStaked: totalStakedTokens,

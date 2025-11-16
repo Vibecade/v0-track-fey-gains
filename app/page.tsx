@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { Card } from "@/components/ui/card"
 import { RateChart } from "@/components/rate-chart"
-import { Percent, Clock } from "lucide-react"
+import { Percent, Clock } from 'lucide-react'
 
 interface RateData {
   xFeyAmount: number
@@ -61,12 +61,10 @@ export default function Home() {
 
   const fetchCurrentRate = async () => {
     try {
-      console.log("[v0] Client fetching current rate at", new Date().toISOString())
       const response = await fetch("/api/fetch-rate")
       const data = await response.json()
 
       if (!data.error) {
-        console.log("[v0] Received conversion rate:", data.feyAmount, "FEY for", data.xFeyAmount, "xFEY")
         setCurrentRate(data)
       }
     } catch (error) {
@@ -420,7 +418,7 @@ export default function Home() {
                   <div className="mb-6 space-y-4 sm:mb-8 sm:space-y-6">
                     {/* FEY Rewards */}
                     {duneData && geckoData && calculateTotalAwardedUSD() && (
-                      <div className="rounded-xl bg-gradient-to-br from-primary/20 to-accent/10 p-4 backdrop-blur-sm sm:rounded-2xl sm:p-6">
+                      <div className="rounded-xl bg-gradient-to-br from-primary/20 to-accent/10 p-4 backdrop-blur-sm sm:rounded-2xl sm:p-6 lg:p-10">
                         <p className="mb-1.5 text-[10px] font-bold uppercase tracking-wide text-muted-foreground sm:mb-2 sm:text-xs lg:text-sm">
                           💰 Staking Rewards
                         </p>

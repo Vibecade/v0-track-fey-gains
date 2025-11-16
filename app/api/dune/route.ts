@@ -25,13 +25,10 @@ async function fetchFromDune() {
 
   const data = await response.json()
 
-  console.log("[v0] Dune API raw response:", JSON.stringify(data.result?.rows?.[0]))
-
   let totalFeyAwarded = 0
 
   if (data.result?.rows && data.result.rows.length > 0) {
     totalFeyAwarded = Number.parseFloat(data.result.rows[0]?.total_fey || "0")
-    console.log("[v0] Dune query returned total_fey:", totalFeyAwarded)
   }
 
   return {
@@ -44,11 +41,9 @@ export async function GET() {
   try {
     const cached = await getCachedData<any>(CACHE_KEY)
     if (cached) {
-      console.log("[v0] Dune cache hit, returning:", cached.totalFeyAwarded)
       return NextResponse.json(cached)
     }
 
-    console.log("[v0] Fetching fresh FEY awarded data from Dune")
     const data = await fetchFromDune()
 
     await setCachedData(CACHE_KEY, data, CACHE_DURATION)

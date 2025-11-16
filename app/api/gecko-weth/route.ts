@@ -29,7 +29,6 @@ export async function GET() {
       return NextResponse.json(cached)
     }
 
-    console.log("[v0] Fetching fresh WETH price from CoinGecko")
     const data = await fetchFromCoinGecko()
 
     await setCachedData(CACHE_KEY, data, CACHE_DURATION)

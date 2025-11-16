@@ -1,30 +1,115 @@
-# Track Fey gains
+# FEY Staking Tracker
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+A real-time dashboard for monitoring FEY token staking rewards and xFEY to FEY conversion rates on Base blockchain.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/vibecades-projects/v0-track-fey-gains)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/dOjbuGvltZV)
+## Features
 
-## Overview
+- **Real-Time Exchange Rates**: Track the current xFEY to FEY conversion ratio updated every minute
+- **Percentage Gains Over Time**: Historical chart showing conversion rate growth since launch (Nov 1, 2025)
+- **Total Value Distributed**: Monitor total staking rewards and WETH buyback fuel
+- **Staking Statistics**: View percentage of total supply staked and projected variable APR (vAPR)
+- **Price Data**: Live FEY token price, market cap, liquidity, and 24h change via DexScreener
+- **Embedded Analytics**: Dune Analytics charts for WETH buyback and FEY staking rewards
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+## Architecture
 
-## Deployment
+### Tech Stack
+- **Framework**: Next.js 16 (App Router)
+- **Database**: Supabase (PostgreSQL)
+- **Styling**: Tailwind CSS v4 with shadcn/ui components
+- **Charts**: Recharts for data visualization
+- **Hosting**: Vercel with hourly cron jobs
 
-Your project is live at:
+### Data Sources
+- **Blockchain Data**: Base network via public RPC endpoints
+- **Price Data**: DexScreener API for FEY token metrics
+- **Analytics**: Dune Analytics for buyback and staking reward queries
+- **On-Chain Contracts**:
+  - xFEY Token: `0x72f5565ab147105614ca4eb83ecf15f751fd8c50`
+  - Launch Block: 37584651
 
-**[https://vercel.com/vibecades-projects/v0-track-fey-gains](https://vercel.com/vibecades-projects/v0-track-fey-gains)**
+### API Endpoints
+- `/api/fetch-rate` - Current xFEY:FEY conversion rate (60s cache)
+- `/api/gecko` - FEY price data from DexScreener (60s cache)
+- `/api/gecko-weth` - WETH price from CoinGecko (5min cache)
+- `/api/dune` - Total FEY staking rewards from Dune (30min cache)
+- `/api/dune-buyback` - WETH buyback data from Dune (30s cache)
+- `/api/staked-supply` - Percentage of supply staked (5min cache)
+- `/api/history` - Historical conversion rate data
+- `/api/cron` - Hourly data collection job
 
-## Build your app
+### Database Schema
 
-Continue building your app on:
+**fey_rates** - Historical conversion rate tracking
+\`\`\`sql
+- id: bigint (primary key)
+- conversion_rate: numeric
+- timestamp: timestamptz
+- xfey_amount: numeric
+- fey_amount: numeric
+- gains_percent: numeric
+\`\`\`
 
-**[https://v0.app/chat/dOjbuGvltZV](https://v0.app/chat/dOjbuGvltZV)**
+**api_cache** - API response caching
+\`\`\`sql
+- id: bigint (primary key)
+- cache_key: text (unique)
+- data: jsonb
+- expires_at: timestamptz
+- created_at: timestamptz
+\`\`\`
 
-## How It Works
+## Environment Variables
 
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+Required environment variables (auto-configured via Vercel integrations):
+
+\`\`\`
+SUPABASE_URL
+SUPABASE_ANON_KEY
+SUPABASE_SERVICE_ROLE_KEY
+DUNE_API_KEY
+\`\`\`
+
+Optional:
+\`\`\`
+ALCHEMY_API_KEY (for faster blockchain queries)
+\`\`\`
+
+## Setup
+
+1. Clone the repository
+2. Install dependencies:
+   \`\`\`bash
+   npm install
+   \`\`\`
+
+3. Connect Supabase integration in Vercel dashboard
+4. Add Dune API key to environment variables
+5. Run database migrations from `/scripts` folder
+6. Deploy to Vercel
+
+## Cron Jobs
+
+The `/api/cron` endpoint runs **every hour** to collect historical data points for the conversion rate chart. This is configured in `vercel.json`.
+
+## Cache Strategy
+
+- **Conversion Rate**: 60 seconds (frequent updates for main metric)
+- **FEY Price**: 60 seconds (DexScreener data)
+- **WETH Price**: 5 minutes (less volatile)
+- **WETH Buyback**: 30 seconds (real-time buyback tracking)
+- **Staking Rewards**: 30 minutes (slow-changing aggregate)
+- **Staked Supply**: 5 minutes (on-chain calculation)
+
+All cached data is stored in Supabase with automatic expiration.
+
+## Credits
+
+- **Dashboard Built By**: Feythful (Feythful.base.eth)
+- **Token Price Data**: [DexScreener](https://dexscreener.com)
+- **Analytics**: [Dune](https://dune.com) by wiz
+- **FEY Protocol**: Not affiliated with Fey.money
+
+## License
+
+MIT

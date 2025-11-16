@@ -13,7 +13,6 @@ async function fetchFromDune() {
     throw new Error("DUNE_API_KEY not configured")
   }
 
-  // Query ID 5734648 for WETH buybacks
   const response = await fetch("https://api.dune.com/api/v1/query/6193023/results?limit=1000", {
     headers: {
       "X-Dune-API-Key": apiKey,
@@ -49,7 +48,6 @@ export async function GET() {
       return NextResponse.json(cached)
     }
 
-    console.log("[v0] Fetching fresh WETH buyback data from Dune")
     const data = await fetchFromDune()
 
     await setCachedData(CACHE_KEY, data, CACHE_DURATION)

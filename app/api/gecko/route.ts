@@ -57,7 +57,6 @@ async function fetchFromDexScreener() {
 
   const data: DexScreenerResponse = await response.json()
 
-  console.log("[v0] DexScreener FULL response:", JSON.stringify(data, null, 2))
 
   if (!data.pairs || data.pairs.length === 0) {
     throw new Error("No pair data found from DexScreener")
@@ -71,14 +70,6 @@ async function fetchFromDexScreener() {
   const liquidityUSD = pair.liquidity?.usd || null
   const priceChange24h = pair.priceChange?.h24 || null
   const volume24h = pair.volume?.h24 || null
-
-  console.log("[v0] Parsed DexScreener Data:")
-  console.log("  - Price USD:", priceUSD)
-  console.log("  - Market Cap:", marketCapUSD)
-  console.log("  - FDV:", fdvUSD)
-  console.log("  - Liquidity:", liquidityUSD)
-  console.log("  - 24h Price Change:", priceChange24h)
-  console.log("  - 24h Volume:", volume24h)
 
   return {
     priceUSD,
@@ -96,11 +87,9 @@ export async function GET() {
   try {
     const cached = await getCachedData<any>(CACHE_KEY)
     if (cached) {
-      console.log("[v0] Returning cached DexScreener data")
       return NextResponse.json(cached)
     }
 
-    console.log("[v0] Fetching fresh FEY price from DexScreener")
     const data = await fetchFromDexScreener()
 
     await setCachedData(CACHE_KEY, data, CACHE_DURATION)
