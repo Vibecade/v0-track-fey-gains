@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { Card } from "@/components/ui/card"
 import { RateChart } from "@/components/rate-chart"
 import { Percent, Clock } from 'lucide-react'
+import { DataCollector } from "@/components/data-collector"
 
 interface RateData {
   xFeyAmount: number
@@ -258,6 +259,9 @@ export default function Home() {
           </div>
         ) : (
           <>
+            {/* Manual data collection tool for preview environment */}
+            
+
             {geckoData && stakedSupply && (
               <div className="mb-6 overflow-hidden rounded-2xl border-2 border-accent bg-gradient-to-br from-accent/5 via-background to-accent/10 p-5 shadow-2xl sm:mb-10 sm:rounded-3xl sm:p-8 lg:p-10">
                 <div className="mb-6 text-center sm:mb-8">
@@ -485,156 +489,127 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="mb-6 grid gap-4 sm:mb-8 sm:gap-6 lg:grid-cols-1">
-              <Card className="group relative overflow-hidden border-accent/20 bg-gradient-to-br from-card via-card to-accent/5 p-4 shadow-lg transition-all hover:shadow-xl sm:p-6 lg:p-7">
-                <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 rounded-full bg-accent/10 blur-3xl" />
-                <div className="relative">
-                  <div className="mb-3 flex items-center gap-2 sm:mb-4 sm:gap-2.5">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 sm:h-9 sm:w-9">
-                      <Percent className="h-4 w-4 text-accent sm:h-5 sm:w-5" />
-                    </div>
-                    <h3 className="text-xs font-semibold text-foreground sm:text-sm">Current Exchange Rate</h3>
+            <Card className="mb-6 overflow-hidden border-accent/20 bg-gradient-to-br from-card via-card to-accent/5 p-4 shadow-lg transition-all hover:shadow-xl sm:mb-8 sm:p-6 lg:p-7">
+              <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 rounded-full bg-accent/10 blur-3xl" />
+              <div className="relative">
+                <div className="mb-3 flex items-center gap-2 sm:mb-4 sm:gap-2.5">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 sm:h-9 sm:w-9">
+                    <Percent className="h-4 w-4 text-accent sm:h-5 sm:w-5" />
                   </div>
-                  <div className="space-y-3 sm:space-y-4">
+                  <h3 className="text-xs font-semibold text-foreground sm:text-sm">Current Exchange Rate</h3>
+                </div>
+                <div className="space-y-3 sm:space-y-4">
+                  <div className="flex flex-col justify-between gap-2 border-b border-border/50 pb-3 sm:flex-row sm:items-baseline sm:pb-4">
+                    <div>
+                      <p className="mb-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground sm:mb-1 sm:text-[11px]">
+                        Percentage Gain
+                      </p>
+                      <p
+                        className="bg-gradient-to-r from-accent to-primary bg-clip-text text-3xl font-black tracking-tight text-transparent sm:text-4xl lg:text-5xl"
+                        style={{ fontSize: "clamp(1.875rem, 7vw, 3rem)" }}
+                      >
+                        {currentRate ? `${currentRate.percentageGain.toFixed(4)}%` : "—"}
+                      </p>
+                    </div>
+                    <div className="text-left sm:text-right">
+                      <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground sm:mb-1 sm:text-[11px]">
+                        from 1:1 baseline
+                      </p>
+                      <p className="mt-0.5 text-base font-bold text-primary sm:mt-1 sm:text-lg lg:text-xl">
+                        {currentRate ? `+${currentRate.totalGain.toLocaleString()} FEY` : "—"}
+                      </p>
+                      {geckoData && calculateGainsUSDValue() && (
+                        <p className="mt-0.5 text-[10px] font-semibold text-accent sm:mt-1 sm:text-xs">
+                          ≈ $
+                          {calculateGainsUSDValue()?.toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}{" "}
+                          USD
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Projected vAPR */}
+                  {calculateEstimatedAnnualRate() !== null && (
                     <div className="flex flex-col justify-between gap-2 border-b border-border/50 pb-3 sm:flex-row sm:items-baseline sm:pb-4">
                       <div>
                         <p className="mb-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground sm:mb-1 sm:text-[11px]">
-                          Percentage Gain
+                          Projected vAPR
                         </p>
                         <p
-                          className="bg-gradient-to-r from-accent to-primary bg-clip-text text-3xl font-black tracking-tight text-transparent sm:text-4xl lg:text-5xl"
-                          style={{ fontSize: "clamp(1.875rem, 7vw, 3rem)" }}
+                          className="bg-gradient-to-r from-primary to-accent bg-clip-text text-2xl font-black tracking-tight text-transparent sm:text-3xl lg:text-4xl"
+                          style={{ fontSize: "clamp(1.5rem, 6vw, 2.25rem)" }}
                         >
-                          {currentRate ? `${currentRate.percentageGain.toFixed(4)}%` : "—"}
+                          {calculateEstimatedAnnualRate()?.toFixed(2)}%
                         </p>
                       </div>
                       <div className="text-left sm:text-right">
                         <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground sm:mb-1 sm:text-[11px]">
-                          from 1:1 baseline
+                          variable annual rate
                         </p>
-                        <p className="mt-0.5 text-base font-bold text-primary sm:mt-1 sm:text-lg lg:text-xl">
-                          {currentRate ? `+${currentRate.totalGain.toLocaleString()} FEY` : "—"}
+                        <p className="mt-0.5 text-[9px] italic text-muted-foreground sm:mt-1 sm:text-[10px]">
+                          Based on current conversion ratio
                         </p>
-                        {geckoData && calculateGainsUSDValue() && (
-                          <p className="mt-0.5 text-[10px] font-semibold text-accent sm:mt-1 sm:text-xs">
-                            ≈ $
-                            {calculateGainsUSDValue()?.toLocaleString(undefined, {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2,
-                            })}{" "}
-                            USD
-                          </p>
-                        )}
                       </div>
                     </div>
+                  )}
 
-                    {/* Projected vAPR */}
-                    {calculateEstimatedAnnualRate() !== null && (
-                      <div className="flex flex-col justify-between gap-2 border-b border-border/50 pb-3 sm:flex-row sm:items-baseline sm:pb-4">
-                        <div>
-                          <p className="mb-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground sm:mb-1 sm:text-[11px]">
-                            Projected vAPR
-                          </p>
-                          <p
-                            className="bg-gradient-to-r from-primary to-accent bg-clip-text text-2xl font-black tracking-tight text-transparent sm:text-3xl lg:text-4xl"
-                            style={{ fontSize: "clamp(1.5rem, 6vw, 2.25rem)" }}
-                          >
-                            {calculateEstimatedAnnualRate()?.toFixed(2)}%
-                          </p>
-                        </div>
-                        <div className="text-left sm:text-right">
-                          <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground sm:mb-1 sm:text-[11px]">
-                            variable annual rate
-                          </p>
-                          <p className="mt-0.5 text-[9px] italic text-muted-foreground sm:mt-1 sm:text-[10px]">
-                            Based on current conversion ratio
-                          </p>
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="flex flex-col justify-between gap-2 border-b border-border/50 pb-3 sm:flex-row sm:items-baseline sm:pb-4">
-                      <div>
-                        <p className="mb-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground sm:mb-1 sm:text-[11px]">
-                          Current FEY Value (1M tokens staked = )
+                  <div className="flex flex-col justify-between gap-2 border-b border-border/50 pb-3 sm:flex-row sm:items-baseline sm:pb-4">
+                    <div>
+                      <p className="mb-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground sm:mb-1 sm:text-[11px]">
+                        Current FEY Value (1M tokens staked = )
+                      </p>
+                      <p
+                        className="text-xl font-bold tracking-tight text-foreground sm:text-2xl lg:text-3xl"
+                        style={{ fontSize: "clamp(1.25rem, 5vw, 1.875rem)" }}
+                      >
+                        {currentRate ? currentRate.feyAmount.toLocaleString() : "—"}
+                      </p>
+                      {geckoData && calculateCurrentFeyUSD() && (
+                        <p className="mt-0.5 text-[10px] font-semibold text-accent sm:mt-1 sm:text-xs">
+                          ≈ $
+                          {calculateCurrentFeyUSD()?.toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}{" "}
+                          USD
                         </p>
-                        <p
-                          className="text-xl font-bold tracking-tight text-foreground sm:text-2xl lg:text-3xl"
-                          style={{ fontSize: "clamp(1.25rem, 5vw, 1.875rem)" }}
-                        >
-                          {currentRate ? currentRate.feyAmount.toLocaleString() : "—"}
-                        </p>
-                        {geckoData && calculateCurrentFeyUSD() && (
-                          <p className="mt-0.5 text-[10px] font-semibold text-accent sm:mt-1 sm:text-xs">
-                            ≈ $
-                            {calculateCurrentFeyUSD()?.toLocaleString(undefined, {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2,
-                            })}{" "}
-                            USD
-                          </p>
-                        )}
-                      </div>
-                      <div className="text-left sm:text-right">
-                        <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground sm:mb-1 sm:text-[11px]">
-                          for 1M xFEY
-                        </p>
-                        {currentRate && (
-                          <p className="mt-0.5 text-[9px] text-muted-foreground sm:mt-1 sm:text-[10px]">
-                            Updated: {new Date(currentRate.timestamp).toLocaleTimeString()}
-                          </p>
-                        )}
-                      </div>
+                      )}
                     </div>
+                    <div className="text-left sm:text-right">
+                      <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground sm:mb-1 sm:text-[11px]">
+                        for 1M xFEY
+                      </p>
+                      {currentRate && (
+                        <p className="mt-0.5 text-[9px] text-muted-foreground sm:mt-1 sm:text-[10px]">
+                          Updated: {new Date(currentRate.timestamp).toLocaleTimeString()}
+                        </p>
+                      )}
+                    </div>
+                  </div>
 
-                    <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-baseline">
-                      <div>
-                        <p className="mb-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground sm:mb-1 sm:text-[11px]">
-                          Conversion Rate
-                        </p>
-                        <p className="text-lg font-bold tracking-tight text-foreground sm:text-xl lg:text-2xl">
-                          {currentRate ? currentRate.conversionRate.toFixed(6) : "—"}
-                        </p>
-                      </div>
-                      <div className="text-left sm:text-right">
-                        <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground sm:mb-1 sm:text-[11px]">
-                          FEY per xFEY
-                        </p>
-                        <div className="mt-0.5 flex items-center gap-1.5 text-[10px] text-muted-foreground sm:mt-1 sm:text-xs">
-                          <Clock className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
-                          <span>{calculateTimeElapsed()} elapsed</span>
-                        </div>
+                  <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-baseline">
+                    <div>
+                      <p className="mb-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground sm:mb-1 sm:text-[11px]">
+                        Conversion Rate
+                      </p>
+                      <p className="text-lg font-bold tracking-tight text-foreground sm:text-xl lg:text-2xl">
+                        {currentRate ? currentRate.conversionRate.toFixed(6) : "—"}
+                      </p>
+                    </div>
+                    <div className="text-left sm:text-right">
+                      <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground sm:mb-1 sm:text-[11px]">
+                        FEY per xFEY
+                      </p>
+                      <div className="mt-0.5 flex items-center gap-1.5 text-[10px] text-muted-foreground sm:mt-1 sm:text-xs">
+                        <Clock className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                        <span>{calculateTimeElapsed()} elapsed</span>
                       </div>
                     </div>
                   </div>
                 </div>
-              </Card>
-            </div>
-
-            <Card className="mb-6 overflow-hidden border-2 border-accent shadow-2xl sm:mb-8">
-              <div className="border-b border-border bg-gradient-to-r from-accent/5 to-primary/5 p-4 sm:p-5 lg:p-6">
-                <h2 className="text-base font-bold text-foreground sm:text-lg lg:text-xl">Percentage Gain Over Time</h2>
-                <p className="mt-0.5 text-[10px] text-muted-foreground sm:mt-1 sm:text-xs lg:text-sm">
-                  Growth trajectory from 1:1 baseline (1M xFEY = 1M FEY) since Nov 1, 2025
-                </p>
-              </div>
-              <div className="p-4 sm:p-5 lg:p-6">
-                {historicalData.length > 0 ? (
-                  <RateChart data={historicalData} />
-                ) : (
-                  <div className="flex min-h-[300px] items-center justify-center rounded-lg border border-dashed border-border bg-muted/30">
-                    <div className="max-w-md text-center">
-                      <Clock className="mx-auto mb-4 h-12 w-12 text-muted-foreground/50" />
-                      <h3 className="mb-2 text-base font-semibold text-foreground sm:text-sm">
-                        Historical Data Collecting
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        The daily cron job will begin collecting data points at midnight UTC. Check back soon to see
-                        your growth trajectory visualized over time.
-                      </p>
-                    </div>
-                  </div>
-                )}
               </div>
             </Card>
 
@@ -715,8 +690,6 @@ export default function Home() {
                 />
               </div>
             </Card>
-
-            
 
             <Card className="bg-gradient-to-br from-muted/30 to-muted/50 p-4 shadow-lg sm:p-5 lg:p-6">
               <h3 className="mb-2 text-sm font-bold text-foreground sm:mb-3 sm:text-base lg:text-lg">
