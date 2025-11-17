@@ -258,19 +258,21 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
-      <header className="border-b border-border bg-card/70 backdrop-blur-md">
-        <div className="mx-auto max-w-7xl px-3 py-6 sm:px-6 sm:py-8 lg:px-8">
-          <div className="flex flex-col items-center justify-center gap-3 sm:gap-4">
-            <h1
-              className="bg-gradient-to-r from-accent via-primary to-accent bg-clip-text text-4xl font-black tracking-tight text-transparent sm:text-5xl lg:text-6xl"
-              style={{ fontSize: "clamp(2rem, 8vw, 4rem)" }}
-            >
-              FEY Dashboard
-            </h1>
-            <p className="text-center text-xs text-muted-foreground sm:text-sm lg:text-base">
-              Real-time gains since Nov 1, 2025
-            </p>
+    <div className="min-h-screen bg-background">
+      <header className="sticky top-0 z-50 border-b border-border/50 bg-card/70 backdrop-blur-xl">
+        <div className="mx-auto max-w-7xl px-3 py-4 sm:px-6 sm:py-6 lg:px-8">
+          <div className="flex items-center justify-between flex-row">
+            <div className="flex items-center gap-2 sm:gap-4">
+              <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-gradient-to-br from-accent to-primary shadow-lg glow-accent-sm bg-ring text-primary">
+                <span className="text-xl sm:text-2xl font-black text-accent-foreground">F</span>
+              </div>
+              <div>
+                <h1 className="bg-gradient-to-r from-accent via-primary to-accent bg-clip-text text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-primary">
+                  FEY Dashboard
+                </h1>
+                <p className="text-[10px] sm:text-xs font-medium text-muted-foreground">Real-time staking analytics</p>
+              </div>
+            </div>
           </div>
         </div>
       </header>
@@ -279,454 +281,295 @@ export default function Home() {
         {loading ? (
           <div className="flex h-64 items-center justify-center">
             <div className="text-center">
-              <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-4 border-accent/30 border-t-accent" />
-              <p className="text-sm text-muted-foreground">Loading historical data...</p>
+              <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-4 border-accent/20 border-t-accent glow-accent" />
+              <p className="text-sm font-medium text-muted-foreground">Loading analytics...</p>
             </div>
           </div>
         ) : (
           <>
-            {/* Manual data collection tool for preview environment */}
-            
-
             {geckoData && stakedSupply && (
-              <div className="mb-6 overflow-hidden rounded-2xl border-2 border-accent bg-gradient-to-br from-accent/5 via-background to-accent/10 p-5 shadow-2xl sm:mb-10 sm:rounded-3xl sm:p-8 lg:p-10">
-                <div className="mb-6 text-center sm:mb-8">
-                  <div className="mx-auto h-px w-32 bg-gradient-to-r from-transparent via-accent to-transparent sm:w-48" />
-                </div>
-
-                {/* Top Grid - Main Metrics */}
-                <div className="mb-4 grid grid-cols-2 gap-3 sm:mb-6 sm:gap-4 lg:grid-cols-4 lg:gap-5">
-                  {/* FEY Price */}
-                  <div className="group relative overflow-hidden rounded-lg border-2 border-accent/40 bg-gradient-to-br from-accent/10 via-background to-transparent p-3 transition-all hover:border-accent hover:shadow-[0_0_15px_rgba(34,197,94,0.25)] sm:p-4">
-                    <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground sm:mb-3 sm:text-xs">
-                      FEY PRICE
-                    </p>
-                    <p
-                      className="mb-1 font-black text-accent sm:mb-2"
-                      style={{ fontSize: "clamp(1.25rem, 4vw, 2rem)" }}
-                    >
+              <div className="mb-6 sm:mb-8 grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
+                {/* FEY Price */}
+                <div className="group relative overflow-hidden rounded-xl sm:rounded-2xl border border-border bg-card p-4 sm:p-6 shadow-lg transition-all hover:border-accent/50 hover:glow-accent-sm">
+                  <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 rounded-full bg-accent/5 blur-3xl" />
+                  <div className="relative">
+                    <p className="mb-1 sm:mb-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-foreground">FEY Price</p>
+                    <p className="mb-1 text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-primary">
                       ${geckoData.priceUSD.toFixed(8)}
                     </p>
-                    {geckoData.priceChange24h !== null &&
-                      geckoData.priceChange24h !== undefined &&
-                      typeof geckoData.priceChange24h === "number" && (
-                        <div className="mt-2 flex flex-col gap-1 border-t border-accent/20 pt-2 sm:mt-3 sm:pt-3">
-                          <p className="text-[9px] font-semibold uppercase tracking-wide text-muted-foreground sm:text-[10px]">
-                            24H CHANGE
-                          </p>
-                          <p
-                            className={`text-xl font-black sm:text-2xl ${
-                              geckoData.priceChange24h >= 0 ? "text-green-500" : "text-red-500"
-                            }`}
-                          >
-                            {geckoData.priceChange24h >= 0 ? "+" : ""}
-                            {geckoData.priceChange24h.toFixed(2)}%
-                          </p>
-                        </div>
-                      )}
-                    {(geckoData.priceChange24h === null || geckoData.priceChange24h === undefined) && (
-                      <div className="mt-2 border-t border-accent/20 pt-2 sm:mt-3 sm:pt-3">
-                        <p className="text-[9px] font-semibold uppercase tracking-wide text-muted-foreground sm:text-[10px]">
-                          24H CHANGE
-                        </p>
-                        <p className="text-xs font-bold text-muted-foreground sm:text-sm">N/A</p>
+                    {geckoData.priceChange24h !== null && typeof geckoData.priceChange24h === "number" && (
+                      <div className="mt-2 sm:mt-3 flex items-center gap-1 sm:gap-2 rounded-lg bg-muted/50 px-2 sm:px-3 py-1 sm:py-1.5">
+                        <span className="text-[10px] sm:text-xs font-semibold text-muted-foreground">24h</span>
+                        <span
+                          className={`text-xs sm:text-sm font-black ${
+                            geckoData.priceChange24h >= 0 ? "text-green-500" : "text-red-500"
+                          }`}
+                        >
+                          {geckoData.priceChange24h >= 0 ? "+" : ""}
+                          {geckoData.priceChange24h.toFixed(2)}%
+                        </span>
                       </div>
                     )}
                   </div>
+                </div>
 
-                  {/* Market Cap */}
-                  <div className="group relative overflow-hidden rounded-lg border-2 border-accent/40 bg-gradient-to-br from-accent/10 via-background to-transparent p-3 transition-all hover:border-accent hover:shadow-[0_0_15px_rgba(34,197,94,0.25)] sm:p-4">
-                    <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground sm:mb-3 sm:text-xs">
-                      MARKET CAP
-                    </p>
-                    <p
-                      className="mb-1 font-black text-accent sm:mb-2"
-                      style={{ fontSize: "clamp(1.25rem, 4vw, 2rem)" }}
-                    >
+                {/* Market Cap */}
+                <div className="group relative overflow-hidden rounded-xl sm:rounded-2xl border border-border bg-card p-4 sm:p-6 shadow-lg transition-all hover:border-primary/50 hover:glow-primary">
+                  <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 rounded-full bg-primary/5 blur-3xl" />
+                  <div className="relative">
+                    <p className="mb-1 sm:mb-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-foreground">Market Cap</p>
+                    <p className="mb-1 text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-primary">
                       {geckoData.fdvUSD && typeof geckoData.fdvUSD === "number"
-                        ? `$${(geckoData.fdvUSD / 1000000).toFixed(4)}M`
-                        : geckoData.marketCapUSD && typeof geckoData.marketCapUSD === "number"
-                          ? `$${(geckoData.marketCapUSD / 1000000).toFixed(4)}M`
-                          : "N/A"}
+                        ? `$${(geckoData.fdvUSD / 1000000).toFixed(3)}M`
+                        : "N/A"}
                     </p>
-                    <div className="mt-2 border-t border-accent/20 pt-2 sm:mt-3 sm:pt-3">
-                      <p className="text-[9px] font-semibold uppercase tracking-wide text-muted-foreground sm:text-[10px]">
-                        FDV
-                      </p>
-                      <p className="text-xs font-bold text-accent sm:text-sm">
-                        {geckoData.fdvUSD && typeof geckoData.fdvUSD === "number"
-                          ? `$${(geckoData.fdvUSD / 1000000).toFixed(5)}M`
-                          : "N/A"}
-                      </p>
+                    <div className="mt-2 sm:mt-3 rounded-lg bg-muted/50 px-2 sm:px-3 py-1 sm:py-1.5">
+                      
                     </div>
                   </div>
+                </div>
 
-                  {/* Total DEX Volume from The Graph */}
-                  {thegraphVolume && (
-                    <div className="group relative overflow-hidden rounded-lg border-2 border-accent/40 bg-gradient-to-br from-accent/10 via-background to-transparent p-3 transition-all hover:border-accent hover:shadow-[0_0_15px_rgba(34,197,94,0.25)] sm:p-4 lg:p-5">
-                      <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground sm:mb-3 sm:text-xs">
-                        TOTAL UNISWAP VOLUME (BASE) 
-                      </p>
-                      <p
-                        className="mb-1 font-black text-accent sm:mb-2"
-                        style={{ fontSize: "clamp(1.5rem, 5vw, 2.25rem)" }}
-                      >
+                {/* Total Volume */}
+                {thegraphVolume && (
+                  <div className="group relative overflow-hidden rounded-xl sm:rounded-2xl border border-border bg-card p-4 sm:p-6 shadow-lg transition-all hover:border-accent/50 hover:glow-accent-sm">
+                    <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 rounded-full bg-accent/5 blur-3xl" />
+                    <div className="relative">
+                      <p className="mb-1 sm:mb-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-foreground">Total Volume</p>
+                      <p className="mb-1 text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-primary">
                         ${(thegraphVolume.volumeUSD / 1000000).toFixed(2)}M
                       </p>
-                      <div className="mt-2 space-y-2 border-t border-accent/20 pt-2 sm:mt-3 sm:space-y-2.5 sm:pt-3">
-                        <div>
-                          <p className="text-[9px] font-semibold uppercase tracking-wide text-muted-foreground sm:mb-1 sm:text-[10px]">
-                            LIQUIDITY
-                          </p>
-                          <p className="text-xs font-bold text-accent sm:text-sm lg:text-base">
-                            ${(thegraphVolume.totalValueLockedUSD / 1000).toFixed(1)}K
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-[9px] font-semibold uppercase tracking-wide text-muted-foreground sm:mb-1 sm:text-[10px]">
-                            TRANSACTIONS
-                          </p>
-                          <p className="text-xs font-bold text-accent sm:text-sm lg:text-base">
-                            {thegraphVolume.txCount.toLocaleString()}
-                          </p>
-                        </div>
-                        <div>
-                          
-                          
-                        </div>
+                      <div className="mt-2 sm:mt-3 space-y-0.5 sm:space-y-1 rounded-lg bg-muted/50 px-2 sm:px-3 py-1.5 sm:py-2">
+                        <p className="text-[10px] sm:text-xs font-semibold text-card-foreground">
+                          TVL: ${(thegraphVolume.totalValueLockedUSD / 1000).toFixed(1)}K
+                        </p>
+                        <p className="text-[10px] sm:text-xs font-semibold text-foreground">
+                          {thegraphVolume.txCount.toLocaleString()} txns
+                        </p>
                       </div>
-                      <p className="mt-2 text-[8px] italic leading-tight text-muted-foreground/70 sm:text-[9px]">
-                        *Data from The Graph subgraph.
-                      </p>
                     </div>
-                  )}
+                  </div>
+                )}
 
-                  {/* Staked % */}
-                  <div className="group relative overflow-hidden rounded-lg border-2 border-accent/40 bg-gradient-to-br from-accent/10 via-background to-transparent p-3 transition-all hover:border-accent hover:shadow-[0_0_15px_rgba(34,197,94,0.25)] sm:p-4 lg:p-5">
-                    <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground sm:mb-3 sm:text-xs">
-                      STAKED %
-                    </p>
-                    <p
-                      className="mb-1 font-black text-accent sm:mb-2"
-                      style={{ fontSize: "clamp(1.75rem, 6vw, 2.5rem)" }}
-                    >
+                {/* Staked % */}
+                <div className="group relative overflow-hidden rounded-xl sm:rounded-2xl border border-border bg-card p-4 sm:p-6 shadow-lg transition-all hover:border-primary/50 hover:glow-primary">
+                  <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 rounded-full bg-primary/5 blur-3xl" />
+                  <div className="relative">
+                    <p className="mb-1 sm:mb-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-foreground">Staked</p>
+                    <p className="mb-1 text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-primary">
                       {stakedSupply.percentageStaked && typeof stakedSupply.percentageStaked === "number"
                         ? stakedSupply.percentageStaked.toFixed(2)
                         : "0.00"}
                       %
                     </p>
-                    <div className="mt-2 border-t border-accent/20 pt-2 sm:mt-3 sm:pt-3">
-                      <p className="text-[9px] font-semibold uppercase tracking-wide text-muted-foreground sm:text-[10px]">
-                        TOTAL STAKED
-                      </p>
-                      <p className="text-xs font-bold text-accent sm:text-sm lg:text-base">
+                    <div className="mt-2 sm:mt-3 rounded-lg bg-muted/50 px-2 sm:px-3 py-1 sm:py-1.5">
+                      <p className="text-[10px] sm:text-xs font-semibold text-foreground">
                         {stakedSupply.totalStaked && typeof stakedSupply.totalStaked === "number"
-                          ? `${(stakedSupply.totalStaked / 1000000000).toFixed(1)}B FEY`
+                          ? `${(stakedSupply.totalStaked / 1000000000).toFixed(2)}B FEY`
                           : "N/A"}
                       </p>
                     </div>
                   </div>
                 </div>
-
-                {/* System Status */}
-                <div className="flex flex-wrap items-center justify-center gap-2 border-t border-accent/20 pt-4 sm:gap-3 sm:pt-5">
-                  <div className="mx-2 hidden h-px flex-1 bg-gradient-to-r from-accent/20 via-accent/40 to-transparent sm:mx-3 sm:block" />
-                  <p className="text-[9px] font-mono text-muted-foreground sm:text-[10px]">
-                    TIMESTAMP: {new Date().toISOString().replace("T", " ").substring(0, 19)} UTC
-                  </p>
-                  <div className="mx-2 hidden h-px flex-1 bg-gradient-to-l from-accent/20 via-accent/40 to-transparent sm:mx-3 sm:block" />
-                </div>
               </div>
             )}
 
-            <div className="mb-6 overflow-hidden rounded-2xl border-2 bg-gradient-to-br from-accent/20 via-primary/15 to-accent/10 p-5 shadow-2xl sm:mb-10 sm:rounded-3xl sm:p-8 lg:p-10">
-              <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-accent/20 blur-3xl" />
-              <div className="absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-primary/20 blur-3xl" />
-
-              <div className="relative text-center">
-                <h2 className="mb-2 text-[10px] font-black uppercase tracking-widest text-accent sm:mb-3 sm:text-sm">
-                  🔥 Total Value Distributed 🔥
+            <div className="mb-6 sm:mb-8 overflow-hidden rounded-2xl sm:rounded-3xl border border-accent/30 bg-gradient-to-br from-accent/10 via-card to-primary/5 p-5 sm:p-8 shadow-2xl backdrop-blur-sm">
+              <div className="mb-6 sm:mb-8 text-center">
+                <h2 className="mb-2 bg-gradient-to-r from-accent via-primary to-accent bg-clip-text text-xl sm:text-2xl font-black uppercase tracking-wider text-transparent">
+                  Total Value Distributed
                 </h2>
+                <div className="mx-auto h-px w-32 sm:w-48 bg-gradient-to-r from-transparent via-accent to-transparent" />
+              </div>
 
-                <div className="mb-6 space-y-4 sm:mb-8 sm:space-y-6">
-                  {/* FEY Rewards */}
-                  {duneData && geckoData && calculateTotalAwardedUSD() && (
-                    <div className="rounded-xl bg-gradient-to-br from-primary/20 to-accent/10 p-4 backdrop-blur-sm sm:rounded-2xl sm:p-6 lg:p-10">
-                      <p className="mb-1.5 text-[10px] font-bold uppercase tracking-wide text-muted-foreground sm:mb-2 sm:text-xs lg:text-sm">
-                        💰 Staking Rewards
-                      </p>
-                      <p
-                        className="mb-0.5 bg-gradient-to-r from-accent to-primary bg-clip-text text-3xl font-black tracking-tight text-transparent sm:mb-1 sm:text-5xl lg:text-7xl"
-                        style={{ fontSize: "clamp(1.75rem, 8vw, 4.5rem)" }}
-                      >
+              <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
+                {/* FEY Rewards */}
+                {duneData && geckoData && calculateTotalAwardedUSD() && (
+                  <div className="group relative overflow-hidden rounded-2xl border bg-card/80 p-6 backdrop-blur-sm transition-all hover:border-accent hover:glow-accent-sm border-primary-foreground">
+                    <div className="absolute right-0 top-0 h-40 w-40 translate-x-10 -translate-y-10 rounded-full bg-accent/10 blur-3xl" />
+                    <div className="relative text-center">
+                      <p className="mb-3 text-xs sm:text-sm font-bold uppercase tracking-wider text-accent bg-primary">Staking Rewards</p>
+                      <p className="mb-2 text-4xl sm:text-5xl font-black tracking-tight border-primary text-primary">
                         {duneData.totalFeyAwarded.toLocaleString()}
                       </p>
-                      <p className="mb-1.5 text-xs font-semibold text-muted-foreground sm:mb-2 sm:text-sm lg:text-base">
-                        FEY Tokens
-                      </p>
-                      <p
-                        className="text-xl font-black text-accent sm:text-2xl lg:text-4xl"
-                        style={{ fontSize: "clamp(1.25rem, 5vw, 2.25rem)" }}
-                      >
-                        $
-                        {calculateTotalAwardedUSD()?.toLocaleString(undefined, {
-                          minimumFractionDigits: 0,
-                          maximumFractionDigits: 0,
-                        })}{" "}
-                        USD
-                      </p>
-                    </div>
-                  )}
-
-                  {/* WETH Buybacks */}
-                  {duneBuybackData && wethPrice && calculateWethBuybackUSD() && (
-                    <div className="rounded-xl bg-gradient-to-br from-accent/20 to-primary/10 p-4 backdrop-blur-sm sm:rounded-2xl sm:p-6">
-                      <p className="mb-1.5 text-[10px] font-bold uppercase tracking-wide text-muted-foreground sm:mb-2 sm:text-xs lg:text-sm">
-                        🚀 Weth used in Buybacks 
-                      </p>
-                      <p
-                        className="mb-0.5 bg-gradient-to-r from-primary to-accent bg-clip-text text-3xl font-black tracking-tight text-transparent sm:mb-1 sm:text-5xl lg:text-7xl"
-                        style={{ fontSize: "clamp(1.75rem, 8vw, 4.5rem)" }}
-                      >
-                        {duneBuybackData.totalWethBuyback.toLocaleString(undefined, {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}
-                      </p>
-                      <p className="mb-1.5 text-xs font-semibold text-primary sm:mb-2 sm:text-sm lg:text-base">
-                        WETH
-                      </p>
-                      <p
-                        className="text-xl font-black text-primary sm:text-2xl lg:text-4xl"
-                        style={{ fontSize: "clamp(1.25rem, 5vw, 2.25rem)" }}
-                      >
-                        $
-                        {calculateWethBuybackUSD()?.toLocaleString(undefined, {
-                          minimumFractionDigits: 0,
-                          maximumFractionDigits: 0,
-                        })}{" "}
-                        USD
-                      </p>
-                    </div>
-                  )}
-                </div>
-
-                <p className="text-[10px] font-semibold text-muted-foreground sm:text-xs lg:text-sm">
-                  Since Nov 1, 2025
-                </p>
-              </div>
-            </div>
-
-            <Card className="mb-6 overflow-hidden border-accent/20 bg-gradient-to-br from-card via-card to-accent/5 p-4 shadow-lg transition-all hover:shadow-xl sm:mb-8 sm:p-6 lg:p-7">
-              <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 rounded-full bg-accent/10 blur-3xl" />
-              <div className="relative">
-                <div className="mb-3 flex items-center gap-2 sm:mb-4 sm:gap-2.5">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 sm:h-9 sm:w-9">
-                    <Percent className="h-4 w-4 text-accent sm:h-5 sm:w-5" />
-                  </div>
-                  <h3 className="text-xs font-semibold text-foreground sm:text-sm">Current Exchange Rate</h3>
-                </div>
-                <div className="space-y-3 sm:space-y-4">
-                  <div className="flex flex-col justify-between gap-2 border-b border-border/50 pb-3 sm:flex-row sm:items-baseline sm:pb-4">
-                    <div>
-                      <p className="mb-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground sm:mb-1 sm:text-[11px]">
-                        Percentage Gain
-                      </p>
-                      <p
-                        className="bg-gradient-to-r from-accent to-primary bg-clip-text text-3xl font-black tracking-tight text-transparent sm:text-4xl lg:text-5xl"
-                        style={{ fontSize: "clamp(1.875rem, 7vw, 3rem)" }}
-                      >
-                        {currentRate ? `${currentRate.percentageGain.toFixed(4)}%` : "—"}
-                      </p>
-                    </div>
-                    <div className="text-left sm:text-right">
-                      <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground sm:mb-1 sm:text-[11px]">
-                        from 1:1 baseline
-                      </p>
-                      <p className="mt-0.5 text-base font-bold text-primary sm:mt-1 sm:text-lg lg:text-xl">
-                        {currentRate ? `+${currentRate.totalGain.toLocaleString()} FEY` : "—"}
-                      </p>
-                      {geckoData && calculateGainsUSDValue() && (
-                        <p className="mt-0.5 text-[10px] font-semibold text-accent sm:mt-1 sm:text-xs">
-                          ≈ $
-                          {calculateGainsUSDValue()?.toLocaleString(undefined, {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
+                      <p className="mb-4 text-sm sm:text-base font-semibold text-foreground">FEY Tokens</p>
+                      <div className="rounded-xl bg-accent/10 px-4 py-3">
+                        <p className="text-2xl sm:text-3xl font-black text-primary bg-card">
+                          $
+                          {calculateTotalAwardedUSD()?.toLocaleString(undefined, {
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
                           })}{" "}
                           USD
                         </p>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Projected vAPR */}
-                  {calculateEstimatedAnnualRate() !== null && (
-                    <div className="flex flex-col justify-between gap-2 border-b border-border/50 pb-3 sm:flex-row sm:items-baseline sm:pb-4">
-                      <div>
-                        <p className="mb-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground sm:mb-1 sm:text-[11px]">
-                          Projected vAPR
-                        </p>
-                        <p
-                          className="bg-gradient-to-r from-primary to-accent bg-clip-text text-2xl font-black tracking-tight text-transparent sm:text-3xl lg:text-4xl"
-                          style={{ fontSize: "clamp(1.5rem, 6vw, 2.25rem)" }}
-                        >
-                          {calculateEstimatedAnnualRate()?.toFixed(2)}%
-                        </p>
-                      </div>
-                      <div className="text-left sm:text-right">
-                        <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground sm:mb-1 sm:text-[11px]">
-                          variable annual rate
-                        </p>
-                        <p className="mt-0.5 text-[9px] italic text-muted-foreground sm:mt-1 sm:text-[10px]">
-                          Based on current conversion ratio
-                        </p>
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="flex flex-col justify-between gap-2 border-b border-border/50 pb-3 sm:flex-row sm:items-baseline sm:pb-4">
-                    <div>
-                      <p className="mb-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground sm:mb-1 sm:text-[11px]">
-                        Current FEY Value (1M tokens staked = )
-                      </p>
-                      <p
-                        className="text-xl font-bold tracking-tight text-foreground sm:text-2xl lg:text-3xl"
-                        style={{ fontSize: "clamp(1.25rem, 5vw, 1.875rem)" }}
-                      >
-                        {currentRate ? currentRate.feyAmount.toLocaleString() : "—"}
-                      </p>
-                      {geckoData && calculateCurrentFeyUSD() && (
-                        <p className="mt-0.5 text-[10px] font-semibold text-accent sm:mt-1 sm:text-xs">
-                          ≈ $
-                          {calculateCurrentFeyUSD()?.toLocaleString(undefined, {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          })}{" "}
-                          USD
-                        </p>
-                      )}
-                    </div>
-                    <div className="text-left sm:text-right">
-                      <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground sm:mb-1 sm:text-[11px]">
-                        for 1M xFEY
-                      </p>
-                      {currentRate && (
-                        <p className="mt-0.5 text-[9px] text-muted-foreground sm:mt-1 sm:text-[10px]">
-                          Updated: {new Date(currentRate.timestamp).toLocaleTimeString()}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-baseline">
-                    <div>
-                      <p className="mb-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground sm:mb-1 sm:text-[11px]">
-                        Conversion Rate
-                      </p>
-                      <p className="text-lg font-bold tracking-tight text-foreground sm:text-xl lg:text-2xl">
-                        {currentRate ? currentRate.conversionRate.toFixed(6) : "—"}
-                      </p>
-                    </div>
-                    <div className="text-left sm:text-right">
-                      <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground sm:mb-1 sm:text-[11px]">
-                        FEY per xFEY
-                      </p>
-                      <div className="mt-0.5 flex items-center gap-1.5 text-[10px] text-muted-foreground sm:mt-1 sm:text-xs">
-                        <Clock className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
-                        <span>{calculateTimeElapsed()} elapsed</span>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </Card>
+                )}
 
-            <Card className="mb-6 overflow-hidden border-2 border-accent shadow-2xl sm:mb-8">
-              <div className="border-b-2 border-accent/30 bg-gradient-to-r from-accent/10 via-primary/10 to-accent/10 p-4 sm:p-6 lg:p-7">
-                <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center sm:gap-4">
-                  <div>
-                    <div className="mb-1.5 flex items-center gap-2 sm:mb-2">
-                      <span className="text-xl sm:text-2xl">🔥</span>
-                      <h2 className="text-lg font-black tracking-tight text-foreground sm:text-xl lg:text-2xl">
-                        WETH Buyback Engine
-                      </h2>
-                    </div>
-                    <p className="text-[10px] font-semibold text-muted-foreground sm:text-xs lg:text-sm">
-                      Real buying pressure fueling FEY growth
-                    </p>
-                  </div>
-                  {duneBuybackData && wethPrice && (
-                    <div className="rounded-xl border-2 border-accent/40 bg-gradient-to-br from-accent/20 to-primary/15 px-4 py-3 shadow-xl sm:rounded-2xl sm:px-6 sm:py-4">
-                      <p className="mb-0.5 text-[9px] font-black uppercase tracking-widest text-muted-foreground sm:mb-1 sm:text-[10px]">
-                        💎 Total Spent
-                      </p>
-                      <p
-                        className="mb-0.5 bg-gradient-to-r from-accent to-primary bg-clip-text text-2xl font-black tracking-tight text-transparent sm:mb-1 sm:text-3xl lg:text-4xl"
-                        style={{ fontSize: "clamp(1.5rem, 5vw, 2.25rem)" }}
-                      >
+                {/* WETH Buybacks */}
+                {duneBuybackData && wethPrice && calculateWethBuybackUSD() && (
+                  <div className="group relative overflow-hidden rounded-2xl border bg-card/80 p-6 backdrop-blur-sm transition-all hover:border-primary hover:glow-primary border-primary-foreground">
+                    <div className="absolute right-0 top-0 h-40 w-40 translate-x-10 -translate-y-10 rounded-full bg-primary/10 blur-3xl" />
+                    <div className="relative text-center">
+                      <p className="mb-3 text-xs sm:text-sm font-bold uppercase tracking-wider text-card bg-primary">Weth used for buybacks</p>
+                      <p className="mb-2 text-4xl sm:text-5xl font-black tracking-tight text-primary">
                         {duneBuybackData.totalWethBuyback.toLocaleString(undefined, {
                           minimumFractionDigits: 2,
                           maximumFractionDigits: 4,
                         })}
                       </p>
-                      <p className="mb-1.5 text-xs font-bold text-primary sm:mb-2 sm:text-sm">WETH</p>
-                      {calculateWethBuybackUSD() && (
-                        <div className="rounded-lg bg-accent/10 px-2.5 py-0.5 sm:px-3 sm:py-1">
-                          <p className="text-center text-xs font-black text-accent sm:text-sm lg:text-base">
-                            $
-                            {calculateWethBuybackUSD()?.toLocaleString(undefined, {
-                              minimumFractionDigits: 0,
-                              maximumFractionDigits: 0,
-                            })}
-                          </p>
-                        </div>
-                      )}
+                      <p className="mb-4 text-sm sm:text-base font-semibold text-foreground">WETH</p>
+                      <div className="rounded-xl px-4 py-3 bg-card">
+                        <p className="text-2xl sm:text-3xl font-black text-primary bg-card">
+                          $
+                          {calculateWethBuybackUSD()?.toLocaleString(undefined, {
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                          })}{" "}
+                          USD
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <p className="mt-4 sm:mt-6 text-center text-[10px] sm:text-xs font-medium text-muted-foreground">Since Nov 1, 2025</p>
+            </div>
+
+            <div className="mb-6 sm:mb-8 overflow-hidden rounded-2xl sm:rounded-3xl border border-border bg-card shadow-2xl">
+              <div className="border-b border-border bg-gradient-to-r from-accent/5 via-primary/5 to-accent/5 p-4 sm:p-6">
+                <h3 className="text-lg sm:text-xl font-black tracking-tight text-foreground">Current Exchange Rate</h3>
+                <p className="mt-1 text-[10px] sm:text-xs font-medium text-muted-foreground">xFEY to FEY conversion metrics</p>
+              </div>
+
+              <div className="p-4 sm:p-6">
+                <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {/* Percentage Gain */}
+                  <div className="rounded-2xl border border-accent/20 bg-gradient-to-br from-accent/5 to-transparent p-6">
+                    <p className="mb-1 sm:mb-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                      Percentage Gain
+                    </p>
+                    <p className="mb-1 bg-gradient-to-r from-accent to-primary bg-clip-text text-4xl sm:text-5xl font-black text-primary">
+                      {currentRate ? `${currentRate.percentageGain.toFixed(4)}%` : "—"}
+                    </p>
+                    <p className="text-sm sm:text-base font-semibold text-foreground">
+                      {currentRate ? `+${currentRate.totalGain.toLocaleString()} FEY` : "—"}
+                    </p>
+                    {geckoData && calculateGainsUSDValue() && (
+                      <p className="mt-2 text-xs sm:text-sm font-semibold text-foreground">
+                        ≈ $
+                        {calculateGainsUSDValue()?.toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}{" "}
+                        USD
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Projected vAPR */}
+                  {calculateEstimatedAnnualRate() !== null && (
+                    <div className="rounded-2xl border bg-gradient-to-br from-primary/5 to-transparent p-6 border-card text-secondary-foreground">
+                      <p className="mb-1 sm:mb-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                        Projected vAPR
+                      </p>
+                      <p className="mb-1 bg-gradient-to-r from-primary to-accent bg-clip-text text-4xl sm:text-5xl font-black text-primary">
+                        {calculateEstimatedAnnualRate()?.toFixed(2)}%
+                      </p>
+                      <p className="text-xs sm:text-sm font-medium text-foreground">Variable annual rate</p>
+                    </div>
+                  )}
+
+                  {/* Current FEY Value */}
+                  <div className="rounded-2xl border border-border bg-muted/30 p-6">
+                    <p className="mb-1 sm:mb-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                      Current Value (1M xFEY)
+                    </p>
+                    <p className="mb-1 text-4xl sm:text-5xl font-black text-primary">
+                      {currentRate ? currentRate.feyAmount.toLocaleString() : "—"}
+                    </p>
+                    {geckoData && calculateCurrentFeyUSD() && (
+                      <p className="text-xs sm:text-sm font-semibold text-foreground">
+                        ≈ $
+                        {calculateCurrentFeyUSD()?.toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}{" "}
+                        USD
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Conversion Rate */}
+                  <div className="rounded-2xl border border-border bg-muted/30 p-6">
+                    <p className="mb-1 sm:mb-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                      Conversion Rate
+                    </p>
+                    <p className="mb-1 text-3xl sm:text-4xl font-black text-foreground">
+                      {currentRate ? currentRate.conversionRate.toFixed(6) : "—"}
+                    </p>
+                    <p className="text-xs sm:text-sm font-medium text-muted-foreground">FEY per xFEY</p>
+                  </div>
+
+                  {/* Time Elapsed */}
+                  <div className="rounded-2xl border border-border bg-muted/30 p-6 md:col-span-2 lg:col-span-2">
+                    <p className="mb-1 sm:mb-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                      Time Elapsed
+                    </p>
+                    <p className="mb-1 text-3xl sm:text-4xl font-black text-foreground">{calculateTimeElapsed()}</p>
+                    <p className="text-xs sm:text-sm font-medium text-muted-foreground">Since launch (Nov 1, 2025)</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mb-6 sm:mb-8 overflow-hidden rounded-2xl sm:rounded-3xl border border-border bg-card shadow-2xl">
+              <div className="border-b border-border bg-gradient-to-r from-accent/5 via-primary/5 to-accent/5 p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
+                  <div>
+                    <h3 className="text-lg sm:text-xl font-black tracking-tight text-foreground">WETH Buybacks</h3>
+                    <p className="mt-1 text-[10px] sm:text-xs font-medium text-muted-foreground">Continuous buying pressure</p>
+                  </div>
+                  {duneBuybackData && wethPrice && (
+                    <div className="rounded-xl border border-accent/30 bg-accent/10 px-3 sm:px-4 py-2">
+                      <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground">Total Spent</p>
+                      <p className="text-sm sm:text-lg font-black text-accent">
+                        {duneBuybackData.totalWethBuyback.toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}{" "}
+                        WETH
+                      </p>
                     </div>
                   )}
                 </div>
               </div>
-              <div className="relative h-[300px] w-full bg-gradient-to-br from-muted/30 to-muted/10 sm:h-[400px] lg:h-[500px]">
-                <iframe
-                  src="https://dune.com/embeds/6193023/9884738"
-                  className="h-full w-full border-0"
-                  title="WETH Buybacks Chart"
-                />
+              <div className="relative h-[300px] sm:h-[400px] w-full bg-muted/10">
+                <iframe src="https://dune.com/embeds/6193023/9884738" className="h-full w-full border-0" />
               </div>
-            </Card>
+            </div>
 
-            <Card className="mb-6 overflow-hidden border-2 border-accent shadow-2xl sm:mb-8">
-              <div className="border-b-2 border-accent/30 bg-gradient-to-r from-accent/10 via-primary/10 to-accent/10 p-4 sm:p-6 lg:p-7">
-                <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center sm:gap-4">
-                  <div>
-                    <div className="mb-1.5 flex items-center gap-2 sm:mb-2">
-                      <span className="text-xl sm:text-2xl">💰</span>
-                      <h2 className="text-lg font-black tracking-tight text-foreground sm:text-xl lg:text-2xl">
-                        FEY Staking Rewards
-                      </h2>
-                    </div>
-                    <p className="text-[10px] font-semibold text-muted-foreground sm:text-xs lg:text-sm">
-                      Total FEY distributed to stakers over time
-                    </p>
-                  </div>
+            <div className="mb-6 sm:mb-8 overflow-hidden rounded-2xl sm:rounded-3xl border border-border bg-card shadow-2xl">
+              <div className="border-b border-border bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 p-4 sm:p-6">
+                <div>
+                  <h3 className="text-lg sm:text-xl font-black tracking-tight text-foreground">FEY Staking Rewards</h3>
+                  <p className="mt-1 text-[10px] sm:text-xs font-medium text-muted-foreground">
+                    Total FEY distributed to stakers
+                  </p>
                 </div>
               </div>
-              <div className="relative h-[300px] w-full bg-gradient-to-br from-muted/30 to-muted/10 sm:h-[400px] lg:h-[500px]">
-                <iframe
-                  src="https://dune.com/embeds/6192852/9884506"
-                  className="h-full w-full border-0"
-                  title="Fey Staking rewards Chart"
-                />
+              <div className="relative h-[300px] sm:h-[400px] w-full bg-muted/10">
+                <iframe src="https://dune.com/embeds/6192852/9884506" className="h-full w-full border-0" />
               </div>
-            </Card>
+            </div>
 
-            <Card className="bg-gradient-to-br from-muted/30 to-muted/50 p-4 shadow-lg sm:p-5 lg:p-6">
-              <h3 className="mb-2 text-sm font-bold text-foreground sm:mb-3 sm:text-base lg:text-lg">
-                About This Tracker
-              </h3>
-              <div className="space-y-1.5 text-[11px] leading-relaxed text-muted-foreground sm:space-y-2 sm:text-xs lg:text-sm">
+            <div className="mb-4 sm:mb-6 rounded-2xl sm:rounded-3xl border border-border bg-card p-4 sm:p-6 shadow-lg">
+              <h3 className="mb-3 sm:mb-4 text-base sm:text-lg font-black text-foreground">About This Tracker</h3>
+              <div className="space-y-2 sm:space-y-3 text-xs sm:text-sm leading-relaxed text-muted-foreground">
                 <p>
                   This tracker monitors the conversion rate between xFEY (staked FEY) and FEY tokens by calling the{" "}
-                  <code className="rounded bg-background px-2 py-0.5 font-mono text-[11px] font-semibold text-foreground">
+                  <code className="rounded-md bg-muted px-2 py-0.5 font-mono text-xs sm:text-sm font-semibold text-foreground">
                     previewRedeem
                   </code>{" "}
                   function on the Base blockchain every hour.
@@ -741,54 +584,39 @@ export default function Home() {
                 </p>
                 <p>
                   <strong className="font-semibold text-foreground">Contract:</strong>{" "}
-                  <code className="rounded bg-background px-2 py-0.5 font-mono text-[11px] font-semibold text-foreground">
+                  <code className="rounded-md bg-muted px-2 py-0.5 font-mono text-xs sm:text-sm font-semibold text-primary">
                     0x72f5565ab147105614ca4eb83ecf15f751fd8c50
                   </code>
                 </p>
               </div>
-            </Card>
+            </div>
 
-            <Card className="mt-4 overflow-hidden border border-primary/30 bg-gradient-to-br from-primary/5 via-background to-accent/5 p-3 shadow-md sm:mt-6 sm:p-4">
-              <div className="mx-auto max-w-xl space-y-2 text-center sm:space-y-3">
-                <p className="text-[10px] italic text-muted-foreground sm:text-xs">Your spare FEY can go a long way</p>
-
-                <div className="space-y-2">
-                  <div className="rounded-md bg-background/60 px-2 py-1.5 sm:px-3 sm:py-2">
-                    <p className="text-[9px] font-semibold uppercase tracking-wide text-muted-foreground sm:text-[10px]">
-                      BNS
-                    </p>
-                    <p className="text-xs font-bold text-accent sm:text-sm">Feythful.base.eth</p>
-                  </div>
-                  <div className="rounded-md bg-background/60 px-2 py-1.5 sm:px-3 sm:py-2">
-                    <p className="text-[9px] font-semibold uppercase tracking-wide text-muted-foreground sm:text-[10px]">
-                      Address
-                    </p>
-                    <p className="break-all font-mono text-[10px] font-semibold text-primary sm:text-xs">
-                      0x83a07D79E7c33cD8C8D03AE43028b067bE020668
-                    </p>
-                  </div>
+            <div className="mb-4 sm:mb-6 rounded-xl sm:rounded-2xl border border-border/50 bg-muted/30 p-3 sm:p-4 text-center">
+              <p className="mb-2 sm:mb-3 text-[10px] sm:text-xs italic text-primary">Your spare FEY can go a long way</p>
+              <div className="mx-auto max-w-md space-y-1.5 sm:space-y-2">
+                <div className="rounded-lg bg-card px-2 sm:px-3 py-1.5 sm:py-2">
+                  <p className="text-[9px] sm:text-[10px] font-semibold uppercase text-muted-foreground">BNS</p>
+                  <p className="text-xs sm:text-sm font-bold text-destructive">Feythful.base.eth</p>
                 </div>
-
-                <p className="text-[9px] text-muted-foreground sm:text-[10px]">
-                  Thank you for supporting community-built tools! 🙏
-                </p>
+                <div className="rounded-lg bg-card px-2 sm:px-3 py-1.5 sm:py-2">
+                  <p className="text-[9px] sm:text-[10px] font-semibold uppercase text-muted-foreground">Address</p>
+                  <p className="break-all font-mono text-[10px] sm:text-xs font-semibold text-destructive">
+                    0x83a07D79E7c33cD8C8D03AE43028b067bE020668
+                  </p>
+                </div>
               </div>
-            </Card>
+              <p className="mt-2 sm:mt-3 text-[9px] sm:text-[10px] text-muted-foreground">Thank you for supporting community tools! 🙏</p>
+            </div>
           </>
         )}
       </main>
 
-      <footer className="mt-8 border-t border-border bg-card/50 backdrop-blur-sm sm:mt-12">
+      <footer className="border-t border-border/50 bg-card/50 backdrop-blur-sm">
         <div className="mx-auto max-w-7xl px-3 py-6 sm:px-6 sm:py-8 lg:px-8">
-          <div className="space-y-2 text-center text-[10px] leading-relaxed text-muted-foreground sm:space-y-3 sm:text-xs lg:text-sm">
-            <p className="font-semibold">
+          <div className="space-y-1.5 sm:space-y-2 text-center text-[10px] sm:text-xs text-muted-foreground">
+            <p>
               Disclaimer: This tracker is not affiliated with{" "}
-              <a
-                href="https://fey.money"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-bold text-primary transition-colors hover:text-accent hover:underline"
-              >
+              <a href="https://fey.money" target="_blank" rel="noopener noreferrer" className="font-semibold text-accent hover:underline">
                 Fey.money
               </a>
             </p>
@@ -798,30 +626,20 @@ export default function Home() {
                 href="https://dexscreener.com/base/0xe155c517c53f078f4b443c99436e42c1b80fd2fb1b3508f431c46b8365e4f3f0"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-semibold text-primary transition-colors hover:text-accent hover:underline"
+                className="font-semibold text-accent hover:underline"
               >
                 Dexscreener
               </a>
             </p>
             <p>
               Dashboard credit:{" "}
-              <a
-                href="https://dune.com/0xwiz"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-semibold text-primary transition-colors hover:text-accent hover:underline"
-              >
+              <a href="https://dune.com/0xwiz" target="_blank" rel="noopener noreferrer" className="font-semibold text-accent hover:underline">
                 0x wiz on Dune
               </a>
             </p>
             <p>
               Built by{" "}
-              <a
-                href="https://sadpepe.me"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-semibold text-primary transition-colors hover:text-accent hover:underline"
-              >
+              <a href="https://sadpepe.me" target="_blank" rel="noopener noreferrer" className="font-semibold text-accent hover:underline">
                 Sadpepe.me
               </a>
             </p>
