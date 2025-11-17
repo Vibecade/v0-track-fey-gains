@@ -323,9 +323,7 @@ export default function Home() {
                         ? `$${(geckoData.fdvUSD / 1000000).toFixed(3)}M`
                         : "N/A"}
                     </p>
-                    <div className="mt-2 sm:mt-3 rounded-lg bg-muted/50 px-2 sm:px-3 py-1 sm:py-1.5">
-                      
-                    </div>
+                    
                   </div>
                 </div>
 
@@ -533,8 +531,8 @@ export default function Home() {
                   </div>
                   {duneBuybackData && wethPrice && (
                     <div className="rounded-xl border border-accent/30 bg-accent/10 px-3 sm:px-4 py-2">
-                      <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-muted-foreground">Total Spent</p>
-                      <p className="text-sm sm:text-lg font-black text-accent">
+                      <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-foreground">Total Spent</p>
+                      <p className="text-sm sm:text-lg font-black text-card-foreground">
                         {duneBuybackData.totalWethBuyback.toLocaleString(undefined, {
                           minimumFractionDigits: 2,
                           maximumFractionDigits: 2,
